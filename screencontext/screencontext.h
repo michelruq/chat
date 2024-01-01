@@ -1,3 +1,4 @@
+#pragma once
 #include<iostream>
 
 template <typename T>
@@ -9,10 +10,10 @@ private:
 public:
    ScreenContext(T* screen) : activeScreen(screen) {};
    
-   bool Handle(int choice)
+   bool Handle()
    {
-      std::cout << choice << " "  << activeScreen->GetName(); 
-	  return activeScreen->Handle(this, choice);
+      std::cout << activeScreen->GetName(); 
+	  return activeScreen->Handle(this);
    }
    
    void SetScreen(T* newScreen)

@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 
 template <typename T1, typename T2>
@@ -27,7 +28,5 @@ Chat<T1, T2>::~Chat()
 template <typename T1, typename T2>
 bool Chat<T1, T2>::Run()
 {
-   int temp{ 0 };
-   std::cin >> temp;
-   return sc-> Handle(temp);
+   return sc-> Handle();
 }
