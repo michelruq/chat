@@ -4,7 +4,7 @@
 #include "screen/screen.h"
 #include "chat/chat.h"
 
-using tChat = Chat<tScreenContext, InvitationScreen, tContainerForMessage, tMessageFactory, tContainerForUser, tUserManager>;
+using tChat = Chat<tScreenContext, MainMenuScreen, tContainerForMessage, tMessageFactory, tContainerForUser, tUserManager>;
 
 int main(int argc, char* argv[])
 {
