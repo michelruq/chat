@@ -14,14 +14,11 @@ public:
    
    bool Handle()
    {
-      std::cout << activeScreen->GetName(); 
 	  return activeScreen->Handle(this);
    }
    
    void SetScreen(T* newScreen)
     {
-        std::cout << "Changing state from " << activeScreen->GetName()
-                  << " to " << newScreen->GetName() << "..." << std::endl;
         delete activeScreen;
         activeScreen = newScreen;
     }  

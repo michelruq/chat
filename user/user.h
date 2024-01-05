@@ -9,6 +9,7 @@ private:
    std::string _name;
 
 public:
+   User() = default;
    User(const std::string& login, const std::string& password, const std::string& name) :
         _login{login}, _password{password}, _name{name} {}
         

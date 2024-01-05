@@ -1,26 +1,44 @@
 #pragma once
 #include <iostream>
 
-template<typename T>
+template <typename T>
 class Container
 {
 private:
-    T arr[5] = { {" ", " ", " "}, {" ", " ", " "}, {" ", " ", " "}, {" ", " ", " "}, {" ", " ", " "} };
-   int currentItem = int{0};
+    T* items;
+    int _size;
 
 public:
-    Container(){};
-   ~Container() = default;
-   
-   void addItem(T item)
-   {
-      arr[currentItem] = item;
-      std::cout << currentItem << "it has been added" << std::endl;
-      ++currentItem;
-   }
+    Container() : _size(0)
+    {
+        items = new T[_size];
+    }
+    ~Container()
+    {
+        delete[] items;
+    }
 
-   T getItem( int index )
-   {
-      return arr[index];
-   }
+    void AddElement(T newItem)
+    {
+        T* pointer = new T[_size + 1];
+        for (int i{ 0 }; i < (_size); ++i)
+        {
+            pointer[i] = items[i];
+        }
+
+        delete[] items;
+        items = pointer;
+        items[_size] = newItem;
+        ++_size;
+    }
+
+    T* GetPointerToElement(int index)
+    {
+        return &items[index];
+    }
+
+    int GetSize()
+    {
+        return _size;
+    }
 };

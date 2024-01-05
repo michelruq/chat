@@ -9,6 +9,7 @@ private:
    std::string _text;
 
 public:
+    Message() = default;
     Message(const std::string& from, const std::string& to, const std::string& text) :
         _from{ from }, _to{ to }, _text{ text } {}
     Message& operator = (const Message& incomingValue)

@@ -26,7 +26,7 @@ private:
     std::string name;
 
 protected:
-    Auxiliary<int> oAuxiluary;
+    Auxiliary<std::string> oAuxiliary;
 
 public:
     Screen(const std::string& name)
@@ -76,21 +76,20 @@ public:
 bool InvitationScreen::Handle(tScreenContext* screenContext)
 {
     bool bRetValue = true;
-    std::cout << std::endl;
-    std::cout << oAuxiluary.name << "Please Make a choice:" << oAuxiluary.reset << std::endl;
-    std::cout << oAuxiluary.choice1 << "0: Login" << oAuxiluary.reset << std::endl;
-    std::cout << oAuxiluary.choice2 << "1: Sign In" << oAuxiluary.reset << std::endl;
-    std::cout << oAuxiluary.choice3 << "2: Exit" << oAuxiluary.reset << std::endl;
-    int choice = oAuxiluary.GetUserChoice();
-    if (choice == 0)
+    std::cout << std::endl << oAuxiliary.name << "Please Make a choice:" << oAuxiliary.reset << std::endl;
+    std::cout << oAuxiliary.choice1 << "0: Login" << oAuxiliary.reset << std::endl;
+    std::cout << oAuxiliary.choice2 << "1: Sign In" << oAuxiliary.reset << std::endl;
+    std::cout << oAuxiliary.choice3 << "2: Exit" << oAuxiliary.reset << std::endl;
+    std::string choice = oAuxiliary.GetUserChoice();
+    if (choice == "0")
     {
         screenContext->SetScreen(new LoginScreen());
     }
-    else if (choice == 1)
+    else if (choice == "1")
     {
         screenContext->SetScreen(new SignInScreen());
     }
-    else if (choice == 2)
+    else if (choice == "2")
     {
         bRetValue = false;
     }
@@ -99,107 +98,153 @@ bool InvitationScreen::Handle(tScreenContext* screenContext)
 
 bool LoginScreen::Handle(tScreenContext* screenContext)
 {
-    std::cout << std::endl;
-    std::cout << oAuxiluary.name << "1: Please Make a choice:" << oAuxiluary.reset << std::endl;
-    std::cout << oAuxiluary.choice1 << "0: Invitation Screen" << oAuxiluary.reset << std::endl;
-    int choice = oAuxiluary.GetUserChoice();
-    if (choice == 0)
-    {
-        screenContext->SetScreen(new InvitationScreen());
-    }
-    else if (choice == 1)
+    bool retValue = true;
+    do
     {
         screenContext->GetUserManager().CreateUser();
-    }
-   return true;
+        std::cout << std::endl << oAuxiliary.name << "Please Make a choice:" << oAuxiliary.reset << std::endl;
+        std::cout << oAuxiliary.choice1 << "0: Back to main menu " << oAuxiliary.reset << std::endl;
+        std::cout << oAuxiliary.choice2 << "1: Do log in with an existing account " << oAuxiliary.reset << std::endl;
+        std::cout << oAuxiliary.choice3 << "2: Exit from chat " << oAuxiliary.reset << std::endl;
+        std::cout << oAuxiliary.choice4 << "Any key: Create an account " << oAuxiliary.reset << std::endl;
+        std::string choice = oAuxiliary.GetUserChoice();
+        if (choice == "0")
+        {
+            screenContext->SetScreen(new InvitationScreen());
+            break;
+        }
+        else if (choice == "1")
+        {
+            screenContext->SetScreen(new SignInScreen());
+            break;
+        }
+        else if (choice == "2")
+        {
+            retValue = false;
+            break;
+        }
+    } while (1);
+    return retValue;
 }
 
 bool SignInScreen::Handle(tScreenContext* screenContext)
 {
-   std::cout << std::endl;
-   std::cout << oAuxiluary.name << "3: Please Make a choice:" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice1 << "0: Show Messsage" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice2 << "1: Enter Message" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice3 << "2: Invitation Screen" << oAuxiluary.reset << std::endl;
-   int choice = oAuxiluary.GetUserChoice();
-   if(choice == 0)
-   {
-       if (screenContext->GetUserManager().isUserAutorized())
-       {
-          screenContext->SetScreen(new ShowMessagesScreen());
-       }
-       else
-       {
-           std::cout << "you can not show message, because you are not autorized" << std::endl;
-       }
-       
-   }
-   else if(choice == 1)
-   {
-       if (screenContext->GetUserManager().isUserAutorized())
-       {
-           screenContext->SetScreen(new EditMessagesScreen());
-       }
-       else
-       {
-           std::cout << "you can not edit message, because you are not autorized" << std::endl;
-       }
-   }
-   else if(choice == 2)
-   {
-      screenContext->SetScreen(new InvitationScreen());
-   }
-   else if (choice == 3)
+   bool retValue = true;
+   do
    {
        screenContext->GetUserManager().CheckUser();
-   }
-   return true;
+       std::cout << std::endl << oAuxiliary.name << "Please Make a choice:" << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice1 << "0: Back to main menu " << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice2 << "1: Exit from chat " << oAuxiliary.reset << std::endl;
+       if (screenContext->GetUserManager().isUserAutorized())
+       {
+           std::cout << oAuxiliary.choice3 << "2: Read messsage" << oAuxiliary.reset << std::endl;
+           std::cout << oAuxiliary.choice4 << "3: Write message" << oAuxiliary.reset << std::endl;
+       }
+       std::cout << oAuxiliary.choice5 << "Any key: Do log in with an existing account " << oAuxiliary.reset << std::endl;
+       std::string choice = oAuxiliary.GetUserChoice();
+       if (choice == "0")
+       {
+           screenContext->SetScreen(new InvitationScreen());
+           break;
+       }
+       else if (choice == "1")
+       {
+           retValue = false;
+           break;
+       }
+       else if (choice == "2")
+       {
+           if (screenContext->GetUserManager().isUserAutorized())
+           {
+              screenContext->SetScreen(new ShowMessagesScreen());
+              break;
+           }    
+       }
+       else if (choice == "3")
+       {
+           if (screenContext->GetUserManager().isUserAutorized())
+           {
+               screenContext->SetScreen(new EditMessagesScreen());
+               break;
+           }
+       }
+   } while (1);
+   return retValue;
 }
 
 bool ShowMessagesScreen::Handle(tScreenContext* screenContext)
 {
-   std::cout << std::endl;
-   std::cout << oAuxiluary.name << "Please Make a choice:" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice1 << "0: Sign In" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice2 << "1: Enter Message" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice3 << "2: Show Message" << oAuxiluary.reset << std::endl;
-   int choice = oAuxiluary.GetUserChoice();
-   if(choice == 0)
+   bool retValue = true;
+   do
    {
-      screenContext->SetScreen(new SignInScreen());
-   }
-   else if (choice == 1)
-   {
-      screenContext->SetScreen(new EditMessagesScreen());
-   }
-   else if (choice == 2)
-   {
-       std::cout << "Messages for " << screenContext->GetUserManager().GetCurrentUser() << std::endl;
-       screenContext->GetMessageFactory().GetMessage();
-   }
-   return true;
+       std::cout << oAuxiliary.choice0 << "Messages for " << screenContext->GetUserManager().GetCurrentUser() << std::endl;
+       screenContext->GetMessageFactory().GetMessage(screenContext->GetUserManager().GetCurrentUser());
+       std::cout << oAuxiliary.name << "Please Make a choice:" << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice1 << "0: Back to main menu " << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice2 << "1: Exit from chat " << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice3 << "2: Leave the current account and do log in with new existing account " << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice4 << "3: Write new messsage" << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice5 << "Any key: Read messsage" << oAuxiliary.reset << std::endl;
+       std::string choice = oAuxiliary.GetUserChoice();
+       if (choice == "0")
+       {
+           screenContext->SetScreen(new InvitationScreen());
+           break;
+       }
+       else if (choice == "1")
+       {
+           retValue = false;
+           break;
+       }
+       else if (choice == "2")
+       {
+           screenContext->SetScreen(new SignInScreen());
+           break;
+       }
+       else if (choice == "3")
+       {
+           screenContext->SetScreen(new EditMessagesScreen());
+           break;
+       }
+   } while (1);
+   return retValue;
 }
 
 bool EditMessagesScreen::Handle(tScreenContext* screenContext)
 {
-   std::cout << std::endl;
-   std::cout << oAuxiluary.name << "Please Make a choice:" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice1 << "0: Sign In" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice2 << "1: Show Messsage" << oAuxiluary.reset << std::endl;
-   std::cout << oAuxiluary.choice3 << "2: Edit Message" << oAuxiluary.reset << std::endl;
-   int choice = oAuxiluary.GetUserChoice();
-   if(choice == 0)
+   bool retValue = true;
+   do
    {
-      screenContext->SetScreen(new SignInScreen());
-   }
-   else if (choice == 1)
-   {
-      screenContext->SetScreen(new ShowMessagesScreen());
-   }
-   else if (choice == 2)
-   {
-       std::cout << "Messages from " << screenContext->GetUserManager().GetCurrentUser() << std::endl;
-       screenContext->GetMessageFactory().SetMessage();
-   }
-   return true;
+       std::cout << oAuxiliary.choice0 << "Messages from " << screenContext->GetUserManager().GetCurrentUser() << std::endl;
+       screenContext->GetMessageFactory().SetMessage(screenContext->GetUserManager().GetCurrentUser());
+       std::cout << std::endl << oAuxiliary.name << "Please Make a choice:" << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice1 << "0: Back to main menu " << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice2 << "1: Exit from chat " << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice3 << "2: Leave the current account and do log in with new existing account " << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice4 << "3: Read messsage" << oAuxiliary.reset << std::endl;
+       std::cout << oAuxiliary.choice5 << "Any key: Write new messsage" << oAuxiliary.reset << std::endl;
+       std::string choice = oAuxiliary.GetUserChoice();
+       if (choice == "0")
+       {
+           screenContext->SetScreen(new InvitationScreen());
+           break;
+       }
+       else if (choice == "1")
+       {
+           retValue = false;
+           break;
+       }
+       else if (choice == "2")
+       {
+           screenContext->SetScreen(new SignInScreen());
+           break;
+       }
+       else if (choice == "3")
+       {
+           screenContext->SetScreen(new ShowMessagesScreen());
+           break;
+       }
+   } while (1);
+   return retValue;
 }
