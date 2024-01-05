@@ -32,7 +32,7 @@ public:
       bool remainMessageExist = false;
       for (int i{ 0 }; i < _container->GetSize(); ++i)
       {
-          if ((_container->GetPointerToElement(i)->GetTo()) == to)
+          if (((_container->GetPointerToElement(i)->GetTo()) == to) || ((_container->GetPointerToElement(i)->GetTo()) == "all"))
           {
               std::cout << oAuxiliary.choice1 << "Message from " << _container->GetPointerToElement(i)->GetFrom() << oAuxiliary.reset << std::endl;
               std::cout << oAuxiliary.choice2 << "contains text: " << _container->GetPointerToElement(i)->GetText() << oAuxiliary.reset << std::endl;
