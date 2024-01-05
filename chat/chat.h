@@ -34,6 +34,8 @@ Chat<T1, T2, T3, T4, T5, T6>::~Chat()
 {
     delete container;
     delete messageFactory;
+    delete containerUser;
+    delete userManager;
     delete sc;
 }
 

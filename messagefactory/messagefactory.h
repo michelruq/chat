@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include "../message/message.h"
@@ -50,7 +51,7 @@ public:
       }
       if (!remainMessageExist)
       {
-          std::cout << oAuxiliary.choice2 << "There is no messages for you" << oAuxiliary.reset << std::endl;
+          std::cout << oAuxiliary.choice2 << "There are no messages for you" << oAuxiliary.reset << std::endl;
       }
    }
 
