@@ -22,10 +22,9 @@ public:
        std::string login, password, name;
        std::cout << std::endl << oAuxiliary.choice1 << "Please create new login, start with your login" << oAuxiliary.reset << std::endl;
        login = oAuxiliary.GetUserChoice();
-       for (int i{ 0 }; i < _container->GetSize(); ++i)
+       for (const User& it : *(_container))
        {
-           User* temp = _container->GetPointerToElement(i);
-           if (login == temp->GetUserLogin())
+           if (login == it.GetUserLogin())
            {
                std::cout << "This login is exist yet, please try again";
                LoginExistYet = true;
@@ -38,13 +37,13 @@ public:
            std::cout << oAuxiliary.choice3 << "complete with password:" << oAuxiliary.reset << std::endl;
            std::cin.ignore();
            getline(std::cin, password);
-           _container->AddElement(User{ login, password, name });
+           _container->push_back(User{ login, password, name });
            std::cout << oAuxiliary.choice1 << "please check credentials for name: " << oAuxiliary.reset << std::endl;
-           std::cout << (_container->GetPointerToElement((_container->GetSize() - 1)))->GetUserName() << std::endl;
+           std::cout << (_container->at((_container->size() - 1))).GetUserName() << std::endl;
            std::cout << oAuxiliary.choice2 << "login: " << oAuxiliary.reset << std::endl;
-           std::cout << (_container->GetPointerToElement((_container->GetSize() - 1)))->GetUserLogin() << std::endl;
+           std::cout << (_container->at((_container->size() - 1))).GetUserLogin() << std::endl;
            std::cout << oAuxiliary.choice3 << "password: " << oAuxiliary.reset << std::endl;
-           std::cout << (_container->GetPointerToElement((_container->GetSize() - 1)))->GetUserPassword() << std::endl;
+           std::cout << (_container->at((_container->size() - 1))).GetUserPassword() << std::endl;
        }
    }
    
@@ -66,20 +65,19 @@ public:
        {
            std::cout << oAuxiliary.choice1 << "Please enter your login: " << oAuxiliary.reset << std::endl;
            std::string login = oAuxiliary.GetUserChoice();
-           for (int i{ 0 }; i < _container->GetSize(); ++i)
+           for (User& it : *(_container))
            {
-               User* temp = _container->GetPointerToElement(i);
-               if (login == temp->GetUserLogin())
+               if (login == it.GetUserLogin())
                {
                    std::string password;
                    std::cout << oAuxiliary.choice2 << "login is existing " << oAuxiliary.reset << std::endl;
                    std::cout << oAuxiliary.choice3 << "Please enter your password" << oAuxiliary.reset << std::endl;
                    std::cin >> password;
-                   if (password == temp->GetUserPassword())
+                   if (password == it.GetUserPassword())
                    {
                        std::cout << oAuxiliary.name << "password is correct " << oAuxiliary.reset << std::endl;
-                       std::cout << oAuxiliary.choice1 << "welcome to chat " << temp->GetUserName() << oAuxiliary.reset << std::endl;
-                       _activeUser = _container->GetPointerToElement(i);
+                       std::cout << oAuxiliary.choice1 << "welcome to chat " << it.GetUserName() << oAuxiliary.reset << std::endl;
+                       _activeUser = &(it);
                        break;
                    }
                    else

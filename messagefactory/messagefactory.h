@@ -23,19 +23,19 @@ public:
        std::string text;
        std::cin.ignore();
        getline(std::cin, text);
-       _container->AddElement(Message{ from, to, text});
+       _container->push_back(Message{ from, to, text});
    }
    
    void GetMessage(std::string to)
    {
       Auxiliary<std::string> oAuxiliary;
       bool remainMessageExist = false;
-      for (int i{ 0 }; i < _container->GetSize(); ++i)
+      for (const Message& it : *(_container))
       {
-          if (((_container->GetPointerToElement(i)->GetTo()) == to) || ((_container->GetPointerToElement(i)->GetTo()) == "all"))
+          if (((it.GetTo()) == to) || ((it.GetTo()) == "all"))
           {
-              std::cout << oAuxiliary.choice1 << "Message from " << _container->GetPointerToElement(i)->GetFrom() << oAuxiliary.reset << std::endl;
-              std::cout << oAuxiliary.choice2 << "contains text: " << _container->GetPointerToElement(i)->GetText() << oAuxiliary.reset << std::endl;
+              std::cout << oAuxiliary.choice1 << "Message from " << it.GetFrom() << oAuxiliary.reset << std::endl;
+              std::cout << oAuxiliary.choice2 << "contains text: " << it.GetText() << oAuxiliary.reset << std::endl;
               remainMessageExist = true;
               std::cout << oAuxiliary.choice3 << "Do you need to go ahead? or quit (q) from reading?" << oAuxiliary.reset << std::endl;
               std::string temp = oAuxiliary.GetUserChoice();

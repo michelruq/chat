@@ -2,17 +2,17 @@
 
 #include<string>
 #include<iostream>
+#include<vector>
 
 #include "../auxiliary/auxiliary.h"
 #include "../screencontext/screencontext.h"
-#include "../container/container.h"
 #include "../messagefactory/messagefactory.h"
 #include "../message/message.h"
 #include "../user/user.h"
 #include "../usermanager/usermanager.h"
 
-using tContainerForMessage = Container<Message>;
-using tContainerForUser = Container<User>;
+using tContainerForMessage = std::vector<Message>;
+using tContainerForUser = std::vector<User>;
 using tMessageFactory = MessageFactory<tContainerForMessage>;
 using tUserManager = UserManager<tContainerForUser>;
 

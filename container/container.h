@@ -32,9 +32,9 @@ public:
         ++_size;
     }
 
-    T* GetPointerToElement(int index)
+    T& GetPointerToElement(int index)
     {
-        return &items[index];
+        return items[index];
     }
 
     int GetSize()
