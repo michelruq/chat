@@ -3,6 +3,8 @@
 #include <string>
 #include "../auxiliary/auxiliary.h"
 #include "../user/user.h"
+#include "../tcpclient/tcpclient.h"
+#include "cmduser.h"
 
 template <typename TContainer>
 class UserManager
@@ -10,6 +12,7 @@ class UserManager
 private:
    TContainer* _container;
    User* _activeUser;
+   TcpClient*  _pTcpClient;
 
 public:
     UserManager(TContainer* container) : _container{ container }, _activeUser{ nullptr } {};
@@ -38,6 +41,15 @@ public:
            std::cin.ignore();
            getline(std::cin, password);
            _container->push_back(User{ login, password, name });
+	   CmdUser oOutgoingCmdUser(_container->at(_container->size() - 1));
+	   std::string userIdentifier = oOutgoingCmdUser.GetString();
+	   if(_pTcpClient->sendTo(userIdentifier) > 0)
+	   {
+              std::cout << "New User has been created!." << std::endl;
+	   }
+	   userIdentifier = "";
+	   _pTcpClient->recieveFrom(userIdentifier);
+	   std::cout << "Server said:" << userIdentifier << std::endl;
            std::cout << oAuxiliary.choice1 << "please check credentials for name: " << oAuxiliary.reset << std::endl;
            std::cout << (_container->at((_container->size() - 1))).GetUserName() << std::endl;
            std::cout << oAuxiliary.choice2 << "login: " << oAuxiliary.reset << std::endl;
@@ -101,6 +113,31 @@ public:
    bool isUserAutorized()
    {
        return (_activeUser != nullptr);
+   }
+
+   void Init(TcpClient* pTcpClient)
+   {
+       _pTcpClient = pTcpClient;
+       CmdUser oOutgoingCmdUser("");
+       std::string userIdentifier;
+       int i{0};
+       do
+       {
+          userIdentifier = oOutgoingCmdUser.WrapRequestForRead(std::to_string(i));
+          if(_pTcpClient->sendTo(userIdentifier) > 0)
+          {
+             std::cout << "Request for reading " << std::endl;
+          }
+          userIdentifier = "";
+          _pTcpClient->recieveFrom(userIdentifier);
+          std::cout << "Server said:" << userIdentifier << std::endl;
+	  ++i;
+	  if(userIdentifier != "")
+	  {
+             CmdUser incomingCmdUser(userIdentifier);
+             _container->push_back(User{incomingCmdUser.GetLogin(), incomingCmdUser.GetPassword(), incomingCmdUser.GetName()}); 
+	  }
+       }while(userIdentifier != "");	  
    }
 
 };

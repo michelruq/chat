@@ -1,12 +1,15 @@
 #pragma once
 #include <iostream>
 
+#include "../tcpclient/tcpclient.h"
+
 template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
 class Chat
 {
 public:
    Chat();
    bool Run();
+   void Init(TcpClient* pTcpClient);
    ~Chat();
 
 private:
@@ -44,3 +47,11 @@ bool Chat<T1, T2, T3, T4, T5, T6>::Run()
 {
    return sc-> Handle();
 }
+
+template <typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+void Chat<T1, T2, T3, T4, T5, T6>::Init(TcpClient* pTcpClient)
+{
+    messageFactory -> Init(pTcpClient);
+    userManager -> Init(pTcpClient);
+}
+

@@ -3,12 +3,15 @@
 #include <string>
 #include "../message/message.h"
 #include "../auxiliary/auxiliary.h"
+#include "../tcpclient/tcpclient.h"
+#include "cmdmessage.h"
 
 template <typename TContainer>
 class MessageFactory
 {
 private:
    TContainer* _container;
+   TcpClient* _pTcpClient;
 
 public:
     MessageFactory(TContainer* container) : _container{ container } {};
@@ -24,6 +27,15 @@ public:
        std::cin.ignore();
        getline(std::cin, text);
        _container->push_back(Message{ from, to, text});
+       CmdMessage oOutgoingCmdMessage(_container->at(_container->size()-1));
+       std::string messageIdentifier = oOutgoingCmdMessage.GetString();
+       if(_pTcpClient->sendTo(messageIdentifier) > 0)
+       {
+          std::cout << "New Message has been created" << messageIdentifier << std::endl;
+       }
+       messageIdentifier = "";
+       _pTcpClient->recieveFrom(messageIdentifier);
+       std::cout << "server said:" << messageIdentifier << std::endl;
    }
    
    void GetMessage(std::string to)
@@ -53,6 +65,31 @@ public:
       {
           std::cout << oAuxiliary.choice2 << "There are no messages for you" << oAuxiliary.reset << std::endl;
       }
+   }
+
+   void Init(TcpClient * pTcpClient)
+   {
+      _pTcpClient = pTcpClient;
+      CmdMessage oOutgoingCmdMessage("");
+      std::string messageIdentifier;
+      int i{0};
+      do
+      {
+         messageIdentifier = oOutgoingCmdMessage.WrapRequestForRead(std::to_string(i));
+	 if(_pTcpClient->sendTo(messageIdentifier) > 0)
+	 {
+	    std::cout << "Request for reading " << std::endl;
+	 }
+	 messageIdentifier = "";
+	 _pTcpClient->recieveFrom(messageIdentifier);
+	 std::cout << "Server said:" << messageIdentifier << std::endl;
+	 ++i;
+	 if(messageIdentifier != "")
+	 {
+            CmdMessage incomingCmdMessage(messageIdentifier);
+            _container->push_back(Message{incomingCmdMessage.GetFrom(), incomingCmdMessage.GetTo(), incomingCmdMessage.GetText()});
+	 }
+      }while(messageIdentifier != "");
    }
 
 };
